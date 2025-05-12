@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>ShiftTime CRM – Запис числа</title>
+</head>
+<body>
+  <h2>Введіть число</h2>
+  <input type="number" id="valueInput" placeholder="Ваше число">
+  <button onclick="submitValue()">Записати</button>
+
+  <p id="status"></p>
+
+  <script>
+    async function submitValue() {
+      const value = document.getElementById('valueInput').value;
+      const status = document.getElementById('status');
+
+      if (!value) {
+        status.textContent = "Будь ласка, введіть число.";
+        return;
+      }
+
+      try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbyR8YhzfNliZFlosPJu_CQXopGrvGV6kix77BImAhyapsruZmM1VgIZFjyaxKE2Sc6ubQ/exec", {
+          method: "POST",
+          body: JSON.stringify({ value }),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+
+        await response.text();
+        status.textContent = "✅ Записано!";
+        document.getElementById('valueInput').value = '';
+      } catch (error) {
+        status.textContent = "❌ Помилка: " + error;
+      }
+    }
+  </script>
+</body>
+</html>
